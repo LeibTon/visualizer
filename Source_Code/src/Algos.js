@@ -2,6 +2,7 @@ import Insertionsort from "./components/insertionsort/App.js"
 import Bubblesort from "./components/bubblesort/App.js"
 import Heapsort from "./components/heapsort/App.js"
 import Backtracking from "./components/backtracking/App.js"
+import Dijkstraalgorithm from "./components/dijkstraalgorithm/App.js"
 import Mergesort from "./components/mergesort/App.js"
 import Selectionsort from "./components/selectionsort/App.js"
 import Quicksort from "./components/quicksort/App.js"
@@ -25,6 +26,11 @@ dom: <Heapsort />
 value: "backtracking",
 text: "Backtracking",
 dom: <Backtracking />
+},
+{
+value: "dijkstraalgorithm",
+text: "Dijkstra's Algorithm",
+dom: <Dijkstraalgorithm />
 },
 {
 value: "mergesort",
