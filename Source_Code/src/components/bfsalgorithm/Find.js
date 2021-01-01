@@ -23,7 +23,6 @@ var target = {row:parseInt(props.targets.target/props.columns),column: props.tar
 function Node(x,y) {
 this.x = x;
 this.y = y;
-this.distance = Number.MAX_SAFE_INTEGER;
 this.parent = null;
 this.visited = false;
 this.blocked = false;
@@ -37,7 +36,6 @@ this.add = (element)=>
 {
 
 this.array.push(element)
-this.array = this.array.sort((left,right)=> (left.distance > right.distance) ? 1: -1)
 }
 this.remove = ()=>
 {
@@ -67,16 +65,14 @@ temp[j].blocked  = true;
 }
 gridArea.push(temp);
 }
-start.distance = 0;
 var queueB = new PriorityQueue();
 
 //Just Start Thing
 if(start.x-1 >=0)
 {
 var t = gridArea[start.x-1][start.y];
-if(!t.visited && !t.blocked && t.distance > 1)
+if(!t.visited && !t.blocked)
 {
-t.distance = 1;
 t.parent = start;
 queueB.add(t);
 gridArea[start.x-1][start.y] = t;
@@ -86,9 +82,8 @@ gridArea[start.x-1][start.y] = t;
 if(start.x + 1 < props.rows)
 {
 var t = gridArea[start.x+1][start.y];
-if(!t.visited && !t.blocked && t.distance > 1)
+if(!t.visited && !t.blocked)
 {
-t.distance = 1;
 t.parent = start;
 queueB.add(t);
 gridArea[start.x+1][start.y] = t;
@@ -97,8 +92,7 @@ gridArea[start.x+1][start.y] = t;
 
 if (start.y - 1 >=0) {
  var t = gridArea[start.x][start.y - 1];
- if (!t.visited && !t.blocked && t.distance > 1) {
- t.distance = 1;
+ if (!t.visited && !t.blocked) {
  t.parent = start;
  queueB.add(t);
 gridArea[start.x][start.y - 1] = t;
@@ -107,8 +101,7 @@ gridArea[start.x][start.y - 1] = t;
 
 if (start.y + 1 < props.columns) {
  var t = gridArea[start.x][start.y + 1];
- if (!t.visited && !t.blocked && t.distance > 1) {
- t.distance = 1;
+ if (!t.visited && !t.blocked) {
  t.parent = start;
  queueB.add(t);
 gridArea[start.x][start.y + 1] = t;
@@ -121,72 +114,72 @@ gridArea[start.x][start.y] = start;
 while(queueB.size()>0)
 {
 var current = queueB.remove();
+if(gridArea[current.x][current.y].visited=== true)
+{
+gridArea[current.x][current.y].parent = current.parent;
+continue;
+}
 document.getElementById(current.x*props.columns+current.y).style.borderColor = "orange";
-await timeout(150)
+await timeout(60)
 if(current.x === target.row && current.y === target.column)
 break;
 
 if(current.x -1 >=0)
 {
 var t = gridArea[current.x-1][current.y];
-if(!t.visited && !t.blocked && t.distance > current.distance + 1)
+if(!t.visited && !t.blocked)
 {
-t.distance = current.distance + 1;
 t.parent = current;
 queueB.add(t);
 gridArea[current.x-1][current.y] = t;
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
-await timeout(60)
+await timeout(20)
 }
 }
 
 if(current.x + 1 < props.rows)
 {
 var t = gridArea[current.x+1][current.y];
-if(!t.visited && !t.blocked && t.distance > current.distance + 1)
+if(!t.visited && !t.blocked)
 {
-t.distance = current.distance + 1;
 t.parent = current;
 queueB.add(t);
 gridArea[current.x+1][current.y] = t;
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
-await timeout(60)
+await timeout(20)
 }
 }
 
-if (current.y - 1 >= 0) {
+if (current.y - 1 >=0) {
  var t = gridArea[current.x][current.y - 1];
- if (!t.visited && !t.blocked && t.distance > current.distance + 1) {
- t.distance = current.distance + 1;
+ if (!t.visited && !t.blocked) {
  t.parent = current;
  queueB.add(t);
 gridArea[current.x][current.y - 1] = t;
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
-await timeout(60)
+await timeout(20)
  }
  }
 
 if (current.y + 1 < props.columns) {
  var t = gridArea[current.x][current.y + 1];
- if (!t.visited && !t.blocked && t.distance > current.distance + 1) {
- t.distance = current.distance + 1;
+ if (!t.visited && !t.blocked) {
  t.parent = current;
  queueB.add(t);
 gridArea[current.x][current.y + 1] = t;
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
-await timeout(60)
+await timeout(20)
  }
  }
-current.visited = true;
-gridArea[current.x][current.y] = current;
+gridArea[current.x][current.y].visited = true;
 document.getElementById(current.x*props.columns+current.y).style.borderColor = "black";
 document.getElementById(current.x*props.columns+current.y).style.background = "orange";
 }

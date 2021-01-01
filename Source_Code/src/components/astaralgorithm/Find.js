@@ -20,10 +20,17 @@ document.querySelector("#randombutton").disabled = true;
 var starting = {row: parseInt(props.targets.starting/props.columns),column: props.targets.starting%props.columns}
 var target = {row:parseInt(props.targets.target/props.columns),column: props.targets.target%props.columns }
 
+function ManhattenDistance(row,col,target)
+{
+return Math.abs(row-target.row)+Math.abs(col-target.column);
+}
+
+
 function Node(x,y) {
 this.x = x;
 this.y = y;
-this.distance = Number.MAX_SAFE_INTEGER;
+this.f = Number.MAX_SAFE_INTEGER;
+this.g = Number.MAX_SAFE_INTEGER;
 this.parent = null;
 this.visited = false;
 this.blocked = false;
@@ -37,7 +44,7 @@ this.add = (element)=>
 {
 
 this.array.push(element)
-this.array = this.array.sort((left,right)=> (left.distance > right.distance) ? 1: -1)
+this.array = this.array.sort((left,right)=> (left.f > right.f) ? 1: -1)
 }
 this.remove = ()=>
 {
@@ -67,16 +74,21 @@ temp[j].blocked  = true;
 }
 gridArea.push(temp);
 }
-start.distance = 0;
+start.f = 0;
+start.g = 0;
 var queueB = new PriorityQueue();
 
 //Just Start Thing
-if(start.x-1 >=0)
+if(start.x -1 >=0)
 {
 var t = gridArea[start.x-1][start.y];
-if(!t.visited && !t.blocked && t.distance > 1)
+var gNew = 1
+var fNew = gNew + ManhattenDistance(start.x-1,start.y,target)
+
+if(!t.visited && !t.blocked && t.f > fNew)
 {
-t.distance = 1;
+t.f = fNew;
+t.g = gNew;
 t.parent = start;
 queueB.add(t);
 gridArea[start.x-1][start.y] = t;
@@ -85,20 +97,26 @@ gridArea[start.x-1][start.y] = t;
 
 if(start.x + 1 < props.rows)
 {
+var gNew = 1
+var fNew = gNew + ManhattenDistance(start.x+1,start.y,target)
 var t = gridArea[start.x+1][start.y];
-if(!t.visited && !t.blocked && t.distance > 1)
+if(!t.visited && !t.blocked && t.f > fNew)
 {
-t.distance = 1;
+t.f = fNew;
+t.g = gNew;
 t.parent = start;
 queueB.add(t);
 gridArea[start.x+1][start.y] = t;
 }
 }
 
-if (start.y - 1 >=0) {
+if (start.y - 1 > 0) {
  var t = gridArea[start.x][start.y - 1];
- if (!t.visited && !t.blocked && t.distance > 1) {
- t.distance = 1;
+var gNew = 1
+var fNew = gNew + ManhattenDistance(start.x,start.y-1,target)
+ if (!t.visited && !t.blocked && t.f > fNew) {
+t.f = fNew;
+t.g = gNew;
  t.parent = start;
  queueB.add(t);
 gridArea[start.x][start.y - 1] = t;
@@ -107,8 +125,11 @@ gridArea[start.x][start.y - 1] = t;
 
 if (start.y + 1 < props.columns) {
  var t = gridArea[start.x][start.y + 1];
- if (!t.visited && !t.blocked && t.distance > 1) {
- t.distance = 1;
+var gNew = 1
+var fNew = gNew + ManhattenDistance(start.x,start.y+1,target)
+ if (!t.visited && !t.blocked && t.f > fNew) {
+t.f = fNew;
+t.g = gNew;
  t.parent = start;
  queueB.add(t);
 gridArea[start.x][start.y + 1] = t;
@@ -129,12 +150,17 @@ break;
 if(current.x -1 >=0)
 {
 var t = gridArea[current.x-1][current.y];
-if(!t.visited && !t.blocked && t.distance > current.distance + 1)
+var gNew = current.g+1
+var fNew = gNew + ManhattenDistance(current.x-1,current.y,target)
+
+if(!t.visited && !t.blocked && t.f > fNew)
 {
-t.distance = current.distance + 1;
+t.f = fNew;
+t.g = gNew;
 t.parent = current;
 queueB.add(t);
 gridArea[current.x-1][current.y] = t;
+
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
@@ -145,12 +171,17 @@ await timeout(60)
 if(current.x + 1 < props.rows)
 {
 var t = gridArea[current.x+1][current.y];
-if(!t.visited && !t.blocked && t.distance > current.distance + 1)
+var gNew = current.g+1
+var fNew = gNew + ManhattenDistance(current.x+1,current.y,target)
+
+if(!t.visited && !t.blocked && t.f > fNew)
 {
-t.distance = current.distance + 1;
+t.f = fNew;
+t.g = gNew;
 t.parent = current;
 queueB.add(t);
 gridArea[current.x+1][current.y] = t;
+
 if(t.x === target.row && t.y === target.column)
 break;
 document.getElementById(t.x*props.columns+t.y).style.background = "yellow";
@@ -160,8 +191,12 @@ await timeout(60)
 
 if (current.y - 1 >= 0) {
  var t = gridArea[current.x][current.y - 1];
- if (!t.visited && !t.blocked && t.distance > current.distance + 1) {
- t.distance = current.distance + 1;
+var gNew = current.g+1
+var fNew = gNew + ManhattenDistance(current.x,current.y-1,target)
+
+ if (!t.visited && !t.blocked && t.f > fNew) {
+t.f = fNew;
+t.g = gNew;
  t.parent = current;
  queueB.add(t);
 gridArea[current.x][current.y - 1] = t;
@@ -174,8 +209,12 @@ await timeout(60)
 
 if (current.y + 1 < props.columns) {
  var t = gridArea[current.x][current.y + 1];
- if (!t.visited && !t.blocked && t.distance > current.distance + 1) {
- t.distance = current.distance + 1;
+var gNew = current.g+1
+var fNew = gNew + ManhattenDistance(current.x,current.y+1,target)
+
+ if (!t.visited && !t.blocked && t.f > fNew) {
+t.f = fNew;
+t.g = gNew;
  t.parent = current;
  queueB.add(t);
 gridArea[current.x][current.y + 1] = t;
