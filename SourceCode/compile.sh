@@ -4,7 +4,7 @@ dest=/home/legolas/Documents/Web\ development/Algorithm\ Visualizer/visualizer_t
 srccode=SourceCode
 cd "$source"
 echo "Building React Code"
-#npm run-script build
+npm run-script build
 cd "$dest"
 echo "Git pulling"
 git pull origin main
