@@ -12,6 +12,7 @@ echo "Deleting all file of the push folder to add new files."
 rm -r "$dest/"*
 echo "Copying build script into script folder"
 cp -r "$source/build/"* "$dest"
+cp  "$source/README.md" "$dest"
 cd "$dest"
 mkdir "$srccode"
 echo "Copying files in SourceCode"
@@ -19,7 +20,7 @@ cd "$source"
 files=(*)
 for i in "${files[@]}"
 do
-if [[ "node_modules build" != *"$i"* ]]; then
+if [[ "node_modules build README.md" != *"$i"* ]]; then
 echo "$i"
 cp -r "$source/$i" "$dest/$srccode"
 fi
