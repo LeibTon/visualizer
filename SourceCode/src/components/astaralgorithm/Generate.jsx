@@ -1,5 +1,7 @@
 import React, {useState} from "react"
 
+
+// Button which will generate the maze randomly.
 function Generate(props) {
 
 function handleClick(){

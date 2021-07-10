@@ -33,5 +33,11 @@ Visualizer is a react web-app where you can visualize various algorithms.
 
 The raw ReactJS code for the algorithm is in [SourceCode](/SourceCode) folder. It has normal React Framework like struture.
 
+## Additional Scripts:
+
+- [compile.sh](/compile.sh): Shell Script to build the react code. Copy the compiled code into the folder to be pushed and source code in SourceCode folder. Then pushes the entire code to Github.
+
+- [check_for_algo.py](/check_for_algo.py): If a new algorithm folder is added in src folder. It imports the corresponding React Component into App.js.
+
 ##### It you have any suggestions or want to add any algo. Ping me.
 ##### Thanks.
