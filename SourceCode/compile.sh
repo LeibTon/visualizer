@@ -1,6 +1,6 @@
 #! /bin/bash
-source=/home/legolas/Documents/Web\ development/Algorithm\ Visualizer/visualizer_main
-dest=/home/legolas/Documents/Web\ development/Algorithm\ Visualizer/visualizer_topush
+source=/home/leibton/Documents/Web\ Development/Algorithm\ Visualizer/visualizer_main
+dest=/home/leibton/Documents/Web\ Development/Algorithm\ Visualizer/visualizer_topush
 srccode=SourceCode
 cd "$source"
 echo "Building React Code"
