@@ -1,7 +1,7 @@
 # Visualizer
 
 Visualizer is a react web-app where you can visualize various algorithms.  
-[Visualizer](https://prakashaditya369.github.io/visualizer)
+[Visualizer](https://leibton.github.io/visualizer)
 
 ## Algorithm Implemented:
 
